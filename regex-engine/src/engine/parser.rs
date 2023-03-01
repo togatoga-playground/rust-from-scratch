@@ -7,3 +7,12 @@ pub enum AST {
     Or(Box<AST>, Box<AST>),
     Seq(Vec<AST>),
 }
+
+#[derive(Debug)]
+pub enum ParseError {
+    InvalidEscape(usize, char),
+    InvalidRightParen(usize),
+    NoPrev(usize),
+    NoRightParen,
+    Empty,
+}
