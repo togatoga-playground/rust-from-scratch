@@ -47,10 +47,8 @@ impl Error for ParseError {}
 
 fn parse_escape(pos: usize, c: char) -> Result<AST, ParseError> {
     match c {
-        '\\' | '(' | ')' |  '|' |  '+' | '*' | '?' => Ok(AST::Char(c)),
-        _ => {
-            Err(ParseError::InvalidEscape(pos, c))
-        }
+        '\\' | '(' | ')' | '|' | '+' | '*' | '?' => Ok(AST::Char(c)),
+        _ => Err(ParseError::InvalidEscape(pos, c)),
     }
 }
 
@@ -58,11 +56,14 @@ fn parse_escape(pos: usize, c: char) -> Result<AST, ParseError> {
 enum PSQ {
     Plus,
     Star,
-    Question
+    Question,
 }
 
-
-fn parse_plus_star_question(seq: &mut Vec<AST>, ast_type: PSQ, pos: usize) -> Result<(), ParseError> {
+fn parse_plus_star_question(
+    seq: &mut Vec<AST>,
+    ast_type: PSQ,
+    pos: usize,
+) -> Result<(), ParseError> {
     if let Some(prev) = seq.pop() {
         let ast = match ast_type {
             PSQ::Plus => AST::Plus(Box::new(prev)),
@@ -75,7 +76,6 @@ fn parse_plus_star_question(seq: &mut Vec<AST>, ast_type: PSQ, pos: usize) -> Re
         Err(ParseError::NoPrev(pos))
     }
 }
-
 
 fn fold_or(mut seq_or: Vec<AST>) -> Option<AST> {
     if seq_or.len() > 1 {
@@ -94,8 +94,6 @@ pub fn parse(expr: &str) -> Result<AST, ParseError> {
         Char,
         Escape,
     };
-    for (i, c) in expr.chars().enumerate() {
-
-    }
+    for (i, c) in expr.chars().enumerate() {}
     todo!()
 }
