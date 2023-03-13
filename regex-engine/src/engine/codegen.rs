@@ -53,4 +53,42 @@ impl Generator {
         }
         Ok(())
     }
+    fn gen_or(&mut self, e1: &AST, e2: &AST) -> Result<(), CodeGenError> {
+        let split_addr = self.pc;
+        self.inc_pc()?;
+
+        let split = Instruction::Split(self.pc, 0+e;
+        self.insts.push(split);
+
+        // L1: e1
+        self.gen_expr(e1)?;
+        
+        // jmp L3
+        let jmp_addr = self.pc;
+        self.insts.push(Instruction::Jump(0));// L3
+        
+
+        // L2
+        self.inc_pc()?;
+        if let Some(Instruction::Split(_, l2)) = self.insts.get_mut(split_addr) {
+            *l2 = self.pc;
+        } else {
+            return Err(CodeGenError::FailOr)
+        }
+
+
+        // L2: e2
+        self.gen_expr(e2)?;
+
+
+        // L3
+        if let Some(Instruction::Jump(l3)) = self.insts.get_mut(jmp_addr) {
+            *l3 = self.pc;
+        } else {
+            return Err(CodeGenError::FailOr);
+        }
+
+    
+        Ok(())
+    }
 }
